@@ -35,12 +35,12 @@ margin-right: 0%;
 }
 #rightButton{
 
-margin-right: 20%;
+margin-right: 0%;
 }
 
         .directionButton {
             margin: 5px;
-            padding: 15px 25px;
+            padding: 30px 40px;
             font-size: 20px;
             cursor: pointer;
         }
@@ -49,24 +49,26 @@ margin-right: 20%;
         }
     </style>
 </head>
-<body>
-    <canvas id="gameCanvas" width="600" height="400"></canvas>
-    <div id="info">
+<body> 
+<div id="info">
         <p>Score: <span id="score">0</span></p>
         <p>High Score: <span id="highScore">0</span></p>
         <p>Last Scores: <span id="lastScores"></span></p>
         <label for="speed">Snake Speed:</label>
         <input type="range" id="speed" min="1" max="20" value="10">
     </div>
+
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    
     <div id="directionButtons">
       
         <button class="directionButton" id="upButton">▲</button><br>
-        <button class="directionButton" id="leftButton">◀</button>
+        <button class="directionButton" id="leftButton">◀ . </button>
         <button class="directionButton" id="rightButton">▶</button><br>
         
         <button class="directionButton" id="downButton">▼</button>
-    </div><br><br><br>
- <p1><a href="developer.html">DEVELOPER INFO</a></p1></div>
+     </div><br><br><br><br><br>
+ <center><p1><a href="developer.html">DEVELOPER INFO</a></p1> </center>
     <script>
         const CELL_SIZE = 20;
         const GRID_WIDTH = 600 / CELL_SIZE;
