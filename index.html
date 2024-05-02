@@ -177,16 +177,22 @@
     foodImg.src = "https://i.pinimg.com/originals/ea/7b/12/ea7b12995b3891440f2af71a9d76a81c.png"; // Replace with the path to your food image
 
     let snakeHeadImg = new Image();
-    snakeHeadImg.src = "https://i.imgur.com/9tJwncM.pnghttps://c8.alamy.com/comp/DJ5DT9/anatomical-model-of-a-snake-head-DJ5DT9.jpg"; // Replace with the path to your snake head image
+    snakeHeadImg.src = "https://banner2.cleanpng.com/20180719/zv/kisspng-two-dots-computer-icons-flickr-social-media-network-5b50acdf15d294.5769589015320137910894.jpg"; // Replace with the path to your snake head image
 
     function drawSnake() {
-        snake.body.forEach(segment => {
+        snake.body.forEach((segment, index) => {
             let x = segment.x * CELL_SIZE;
             let y = segment.y * CELL_SIZE;
-            ctx.fillStyle = "white"; // Changed color to white
-            ctx.beginPath();
-            ctx.arc(x + CELL_SIZE / 2, y + CELL_SIZE / 2, CELL_SIZE / 2, 0, Math.PI * 2);
-            ctx.fill();
+            if (index === 0) {
+                // Draw snake head
+                ctx.drawImage(snakeHeadImg, x, y, CELL_SIZE, CELL_SIZE);
+            } else {
+                // Draw snake body
+                ctx.fillStyle = "white"; // Changed color to white
+                ctx.beginPath();
+                ctx.arc(x + CELL_SIZE / 2, y + CELL_SIZE / 2, CELL_SIZE / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
         });
     }
 
