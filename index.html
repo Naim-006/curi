@@ -56,7 +56,7 @@
             cursor: pointer;
             border: 1px solid #999;
             border-radius: 5px;
-            margin: 30px;
+            
             background-color: #f1f1f1;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -153,7 +153,7 @@
 </div>
 
 
-<canvas id="gameCanvas" width="600" height="400"></canvas>
+<canvas id="gameCanvas" width="450" height="400"></canvas>
 
 <div id="directionButtons">
     <button class="directionButton" id="upButton">▲</button><br>
@@ -168,7 +168,7 @@
 
 <script>
     const CELL_SIZE = 20;
-    const GRID_WIDTH = 600 / CELL_SIZE;
+    const GRID_WIDTH = 450 / CELL_SIZE;
     const GRID_HEIGHT = 400 / CELL_SIZE;
 
     let snake = {
