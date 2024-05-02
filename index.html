@@ -122,6 +122,20 @@
             font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
     </style>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered:', registration);
+                    })
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+    <script src="/script.js"></script>
 </head>
 <body>
 
