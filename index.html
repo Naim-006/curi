@@ -32,8 +32,8 @@
             background-color: #FFD700;
             padding: 15px;
             text-align: center;
-            width: 70%;
-            margin-left: 12%;
+            width: 100%;
+            
             border-radius: 10px;
         }
 
@@ -56,6 +56,7 @@
             cursor: pointer;
             border: 1px solid #999;
             border-radius: 5px;
+            margin: 30px;
             background-color: #f1f1f1;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -82,7 +83,9 @@
             color: #fff;
             padding: 20px;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
+            width:100%;
+
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             animation: developer-animation 1s infinite;
         }
@@ -139,9 +142,9 @@
 <canvas id="gameCanvas" width="600" height="400"></canvas>
 
 <div id="directionButtons">
-    <button class="directionButton" id="upButton">▲</button>
+    <button class="directionButton" id="upButton">▲</button><br>
     <button class="directionButton" id="leftButton">◀</button>
-    <button class="directionButton" id="rightButton">▶</button>
+    <button class="directionButton" id="rightButton">▶</button><br>
     <button class="directionButton" id="downButton">▼</button>
 </div>
 
@@ -315,6 +318,26 @@
         clearInterval(gameLoop);
         gameLoop = setInterval(update, 1000 / snakeSpeed);
     });
+    document.getElementById("upButton").addEventListener("click", function () {
+    if (snake.direction !== "DOWN")
+        snake.direction = "UP";
+});
+
+document.getElementById("downButton").addEventListener("click", function () {
+    if (snake.direction !== "UP")
+        snake.direction = "DOWN";
+});
+
+document.getElementById("leftButton").addEventListener("click", function () {
+    if (snake.direction !== "RIGHT")
+        snake.direction = "LEFT";
+});
+
+document.getElementById("rightButton").addEventListener("click", function () {
+    if (snake.direction !== "LEFT")
+        snake.direction = "RIGHT";
+});
+
 
     document.getElementById("highScore").textContent = highScore;
     reloadGame();
