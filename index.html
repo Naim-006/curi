@@ -48,14 +48,14 @@
         }
 
         .directionButton {
-            margin: 10px;
-            padding: 20px;
+            margin: 15px;
+            padding: 30px;
             font-size: 20px;
             cursor: pointer;
             border: 1px solid #999;
             border-radius: 10px;
             background-color: #f1f1f1;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.1s, color 0.1s;
         }
 
         canvas {
@@ -131,7 +131,6 @@
 </head>
 <body>
 
-    <div id="dedicationMessage" style="display: none; position: fixed; top: 50px; left: 50%; transform: translateX(-50%); background-color: red; padding: 300px 500px; border-radius: 5px; font-size: 50px; font-weight: bold;">Dedicated to ALCICEK</div>
 
 <div id="topContent">
     <h2>Collect poop with the snake!</h2>
@@ -151,11 +150,11 @@
 <canvas id="gameCanvas" width="600" height="400"></canvas>
 
 <div id="directionButtons">
-    <button class="directionButton" id="upButton">▲</button>
-    <button class="directionButton" id="downButton">▼</button>
+    <button class="directionButton" id="upButton">▲</button><br>
+   
     <button class="directionButton" id="leftButton">◀</button>
-    <button class="directionButton" id="rightButton">▶</button>
-
+    <button class="directionButton" id="rightButton">▶</button><br>
+    <button class="directionButton" id="downButton">▼</button>
 </div>
 
 <div id="developer">
@@ -163,13 +162,7 @@
 </div>
 
 <script>
-     window.onload = function() {
-        var dedicationMsg = document.getElementById("dedicationMessage");
-        dedicationMsg.style.display = "block";
-        setTimeout(function() {
-            dedicationMsg.style.display = "none";
-        }, 4000);
-    };
+    
     const CELL_SIZE = 20;
     const GRID_WIDTH = 600 / CELL_SIZE;
     const GRID_HEIGHT = 400 / CELL_SIZE;
