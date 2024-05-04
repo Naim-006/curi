@@ -32,8 +32,6 @@
             background-color: #FFD700;
             padding: 15px;
             text-align: center;
-            width: 100%;
-            
             border-radius: 10px;
         }
 
@@ -50,30 +48,20 @@
         }
 
         .directionButton {
-            margin: 15px;
-            padding: 35px 50px;
+            margin: 10px;
+            padding: 20px;
             font-size: 20px;
             cursor: pointer;
             border: 1px solid #999;
-            border-radius: 5px;
-            
+            border-radius: 10px;
             background-color: #f1f1f1;
             transition: background-color 0.3s, color 0.3s;
-        }
-
-        .directionButton:hover {
-            background-color: #9c9898;
-            color: #333;
-        }
-
-        p1 {
-            color: silver;
         }
 
         canvas {
             display: block;
             margin: 0 auto;
-            border: 10px solid #dbd4d4;
+            border: 5px solid #dbd4d4;
             border-radius: 10px;
             background-color: #666;
         }
@@ -84,8 +72,7 @@
             padding: 20px;
             text-align: center;
             margin-top: 30px;
-            width:100%;
-
+            width: 100%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             animation: developer-animation 1s infinite;
         }
@@ -121,6 +108,10 @@
             color:crimson;
             font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
+        .control-option {
+            display: inline-block;
+            margin: 10px;
+        }
     </style>
     <script>
         if ('serviceWorker' in navigator) {
@@ -134,11 +125,13 @@
                     });
             });
         }
+        
     </script>
-    <script src="/script.js"></script>
+    
 </head>
 <body>
 
+    <div id="dedicationMessage" style="display: none; position: fixed; top: 50px; left: 50%; transform: translateX(-50%); background-color: red; padding: 300px 500px; border-radius: 5px; font-size: 50px; font-weight: bold;">Dedicated to ALCICEK</div>
 
 <div id="topContent">
     <h2>Collect poop with the snake!</h2>
@@ -148,27 +141,37 @@
         <p>Last Scores: <span id="lastScores"></span></p>
         <label for="speed">Snake Speed:</label>
         <input type="range" id="speed" min="1" max="20" value="10">
+        <label for="computerControl">COMPUTER MODE:</label>
+        <input type="checkbox" id="computerControl">
     </div>
     
 </div>
 
 
-<canvas id="gameCanvas" width="450" height="400"></canvas>
+<canvas id="gameCanvas" width="600" height="400"></canvas>
 
 <div id="directionButtons">
-    <button class="directionButton" id="upButton">▲</button><br>
-    <button class="directionButton" id="leftButton">◀</button>
-    <button class="directionButton" id="rightButton">▶</button><br>
+    <button class="directionButton" id="upButton">▲</button>
     <button class="directionButton" id="downButton">▼</button>
+    <button class="directionButton" id="leftButton">◀</button>
+    <button class="directionButton" id="rightButton">▶</button>
+
 </div>
 
 <div id="developer">
-    <p1><a href="developer.html">DEVELOPER INFO</a></p1>
+    <p><a href="developer.html">DEVELOPER INFO</a></p>
 </div>
 
 <script>
+     window.onload = function() {
+        var dedicationMsg = document.getElementById("dedicationMessage");
+        dedicationMsg.style.display = "block";
+        setTimeout(function() {
+            dedicationMsg.style.display = "none";
+        }, 4000);
+    };
     const CELL_SIZE = 20;
-    const GRID_WIDTH = 450 / CELL_SIZE;
+    const GRID_WIDTH = 600 / CELL_SIZE;
     const GRID_HEIGHT = 400 / CELL_SIZE;
 
     let snake = {
@@ -189,6 +192,7 @@
 
     let snakeSpeed = 10;
     let gameLoop;
+    let computerControl = false; // Initially set to manual control
 
     let foodImg = new Image();
     foodImg.src = "https://i.pinimg.com/originals/ea/7b/12/ea7b12995b3891440f2af71a9d76a81c.png"; // Replace with the path to your food image
@@ -220,23 +224,32 @@
     function moveSnake() {
         let head = { x: snake.body[0].x, y: snake.body[0].y };
 
-        switch (snake.direction) {
-            case "UP":
-                head.y -= 1;
-                if (head.y < 0) head.y = GRID_HEIGHT - 1;
-                break;
-            case "DOWN":
-                head.y += 1;
-                if (head.y >= GRID_HEIGHT) head.y = 0;
-                break;
-            case "LEFT":
-                head.x -= 1;
-                if (head.x < 0) head.x = GRID_WIDTH - 1;
-                break;
-            case "RIGHT":
-                head.x += 1;
-                if (head.x >= GRID_WIDTH) head.x = 0;
-                break;
+        if (!computerControl) {
+            // Manual control
+            switch (snake.direction) {
+                case "UP":
+                    head.y -= 1;
+                    if (head.y < 0) head.y = GRID_HEIGHT - 1;
+                    break;
+                case "DOWN":
+                    head.y += 1;
+                    if (head.y >= GRID_HEIGHT) head.y = 0;
+                    break;
+                case "LEFT":
+                    head.x -= 1;
+                    if (head.x < 0) head.x = GRID_WIDTH - 1;
+                    break;
+                case "RIGHT":
+                    head.x += 1;
+                    if (head.x >= GRID_WIDTH) head.x = 0;
+                    break;
+            }
+        } else {
+            // Automatic control
+            // Implement your automatic control logic here
+            // For now, let's just move the snake in the default right direction
+            head.x += 1;
+            if (head.x >= GRID_WIDTH) head.x = 0;
         }
 
         if (isSnakeCollision(head)) {
@@ -285,22 +298,26 @@
     function handleKeyPress(event) {
         switch (event.key) {
             case "ArrowUp":
-                if (snake.direction !== "DOWN")
+                if (!computerControl && snake.direction !== "DOWN")
                     snake.direction = "UP";
                 break;
             case "ArrowDown":
-                if (snake.direction !== "UP")
+                if (!computerControl && snake.direction !== "UP")
                     snake.direction = "DOWN";
                 break;
             case "ArrowLeft":
-                if (snake.direction !== "RIGHT")
+                if (!computerControl && snake.direction !== "RIGHT")
                     snake.direction = "LEFT";
                 break;
             case "ArrowRight":
-                if (snake.direction !== "LEFT")
+                if (!computerControl && snake.direction !== "LEFT")
                     snake.direction = "RIGHT";
                 break;
         }
+    }
+
+    function toggleComputerControl() {
+        computerControl = !computerControl;
     }
 
     function reloadGame() {
@@ -332,29 +349,106 @@
         clearInterval(gameLoop);
         gameLoop = setInterval(update, 1000 / snakeSpeed);
     });
+
+    document.getElementById("computerControl").addEventListener("change", toggleComputerControl);
+
     document.getElementById("upButton").addEventListener("click", function () {
-    if (snake.direction !== "DOWN")
+    if (!computerControl && snake.direction !== "DOWN")
         snake.direction = "UP";
 });
 
 document.getElementById("downButton").addEventListener("click", function () {
-    if (snake.direction !== "UP")
+    if (!computerControl && snake.direction !== "UP")
         snake.direction = "DOWN";
 });
 
 document.getElementById("leftButton").addEventListener("click", function () {
-    if (snake.direction !== "RIGHT")
+    if (!computerControl && snake.direction !== "RIGHT")
         snake.direction = "LEFT";
 });
 
 document.getElementById("rightButton").addEventListener("click", function () {
-    if (snake.direction !== "LEFT")
+    if (!computerControl && snake.direction !== "LEFT")
         snake.direction = "RIGHT";
 });
 
 
     document.getElementById("highScore").textContent = highScore;
     reloadGame();
+    function moveSnake() {
+    let head = { x: snake.body[0].x, y: snake.body[0].y };
+
+    if (!computerControl) {
+        // Manual control
+        switch (snake.direction) {
+            case "UP":
+                head.y -= 1;
+                if (head.y < 0) head.y = GRID_HEIGHT - 1;
+                break;
+            case "DOWN":
+                head.y += 1;
+                if (head.y >= GRID_HEIGHT) head.y = 0;
+                break;
+            case "LEFT":
+                head.x -= 1;
+                if (head.x < 0) head.x = GRID_WIDTH - 1;
+                break;
+            case "RIGHT":
+                head.x += 1;
+                if (head.x >= GRID_WIDTH) head.x = 0;
+                break;
+        }
+    } else {
+        // Automatic control
+        // Calculate the direction towards the food
+        if (food.x > head.x) {
+            snake.direction = "RIGHT";
+            head.x += 1;
+        } else if (food.x < head.x) {
+            snake.direction = "LEFT";
+            head.x -= 1;
+        } else if (food.y > head.y) {
+            snake.direction = "DOWN";
+            head.y += 1;
+        } else if (food.y < head.y) {
+            snake.direction = "UP";
+            head.y -= 1;
+        }
+        
+        // Wrap around the grid if the snake hits the boundary
+        if (head.x < 0) head.x = GRID_WIDTH - 1;
+        if (head.x >= GRID_WIDTH) head.x = 0;
+        if (head.y < 0) head.y = GRID_HEIGHT - 1;
+        if (head.y >= GRID_HEIGHT) head.y = 0;
+    }
+
+    if (isSnakeCollision(head)) {
+        clearInterval(gameLoop);
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("highScore", highScore);
+            document.getElementById("highScore").textContent = highScore;
+        }
+        alert("Game Over! Your Score: " + score);
+        recordScore(score);
+        reloadGame();
+        return;
+    }
+
+    snake.body.unshift(head);
+
+    if (head.x === food.x && head.y === food.y) {
+        snake.grow = true;
+        score++;
+        document.getElementById("score").textContent = score;
+        generateFood();
+    } else if (!snake.grow) {
+        snake.body.pop();
+    } else {
+        snake.grow = false;
+    }
+}
+
 </script>
 </body>
 </html>
